@@ -12,7 +12,7 @@
 
         public function main(): void{
             // Инициализируем игру
-            _game = new Game()
+            _game = new Game(this);
             _game.x = 0;
             _game.y = 0;
             _game.width = Config.STAGE_WIDTH;

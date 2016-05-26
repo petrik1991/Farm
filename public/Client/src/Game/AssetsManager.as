@@ -20,15 +20,17 @@ import mx.controls.Image;
             return _instance;
         }
 
-        public function loadPicture(_url : String) : void {
+        public function loadPictureAndCache(_url : String, _source : Object) : void {
             if (_cash[_url] == null)
             {
                 trace("Caching " + _url);
                 var _img : Image = new Image();
-                _img.load(Config.SERVER_URL);
+                _img.load(Config.SERVER_URL + Config.PICTURES_DIR + _url);
                 _cash[_url] = _img;
                 trace("Caching done");
             }
+
+            _source.source = _cash[_url].source;
         }
     }
 }
