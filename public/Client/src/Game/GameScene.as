@@ -81,9 +81,6 @@ import spark.components.SkinnableContainer;
         }
 
         private function mousePressed(_event : MouseEvent) : void {
-            trace("GameScene.mouse_down_under_background _event.stageX = " + _event.stageX.toString() +
-                    " _event.stageY = " + _event.stageY.toString());
-
             _xCoord = _event.stageX;
             _yCoord = _event.stageY;
             // Добавлем слушателя на отжатие и перемещение
@@ -92,26 +89,20 @@ import spark.components.SkinnableContainer;
         }
 
         private function mousePressedOff(_event : MouseEvent) : void {
-            trace("GameScene.mouse_up_under_background");
-
             // Удаляем слушателя на отжатие и перемещение
             removeEventListener(MouseEvent.MOUSE_UP, mousePressedOff);
             removeEventListener(MouseEvent.MOUSE_MOVE, mouseDrag);
         }
 
         private function mouseDrag(_event : MouseEvent) : void {
-            trace("GameScene.mouse_move_under_background _event.stageX = " + _event.stageX.toString() +
-                    " _event.stageY = " + _event.stageY.toString());
-
             // Вычисляем новые координаты
             var _x : Number = _bg.x - (_xCoord - _event.stageX);
             var _y : Number = _bg.y - (_yCoord - _event.stageY);
-            trace("_x = " + _x.toString() + "_y = " + _y.toString());
+
             if (_x < Config.STAGE_WIDTH - _bg.width){_x = Config.STAGE_WIDTH - _bg.width}
             if (_y < Config.STAGE_HEIGHT - _bg.height){_y = Config.STAGE_HEIGHT - _bg.height}
             if (_x > 0){_x = 0}
             if (_y > 0){_y = 0}
-            trace("after if _x = " + _x.toString() + "_y = " + _y.toString());
 
             _xCoord = _event.stageX;
             _yCoord = _event.stageY;

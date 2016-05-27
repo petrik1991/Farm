@@ -11,10 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160525202152) do
-
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
+ActiveRecord::Schema.define(version: 20160527144937) do
 
   create_table "item_types", force: :cascade do |t|
     t.integer  "phase_count"
@@ -26,8 +23,7 @@ ActiveRecord::Schema.define(version: 20160525202152) do
   create_table "stage_items", force: :cascade do |t|
     t.integer  "item_type"
     t.integer  "phase"
-    t.string   "x"
-    t.string   "integer"
+    t.integer  "x"
     t.integer  "y"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
