@@ -14,19 +14,15 @@
 ActiveRecord::Schema.define(version: 20160527144937) do
 
   create_table "item_types", force: :cascade do |t|
-    t.integer  "phase_count"
-    t.string   "name"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer "phase_count", default: 0
+    t.string  "name"
   end
 
   create_table "stage_items", force: :cascade do |t|
-    t.integer  "item_type"
-    t.integer  "phase"
-    t.integer  "x"
-    t.integer  "y"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.integer "item_type"
+    t.integer "phase",     default: 0
+    t.integer "x"
+    t.integer "y"
   end
 
 end

@@ -11,7 +11,6 @@ import spark.components.SkinnableContainer;
     {
         private var _bg : SkinnableContainer;
         private var _bgImage : Image;
-
         private var _bgGarden : SkinnableContainer;
 
         // Координаты курсора, для перемещения поля
@@ -109,6 +108,18 @@ import spark.components.SkinnableContainer;
 
             _bg.x = _x;
             _bg.y = _y;
+        }
+
+        public function getBackground() : SkinnableContainer {
+            return _bg;
+        }
+
+        public function getDelta_X() : Number {
+            return -1 * _bg.x;
+        }
+
+        public function getDelta_Y() : Number {
+            return -1 * (_bg.y);
         }
     }
 }

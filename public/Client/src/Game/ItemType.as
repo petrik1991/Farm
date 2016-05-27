@@ -39,5 +39,10 @@ import flash.utils.Dictionary;
         public function getImgName() : String {
             return _name;
         }
+
+        public static function getById(_id : Number) : ItemType {
+            trace("ItemType.get_by_id " + _typesItem[_id])
+            return _typesItem[_id];
+        }
     }
 }

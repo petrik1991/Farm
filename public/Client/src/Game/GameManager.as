@@ -1,9 +1,9 @@
 package Game
 {
 import flash.events.MouseEvent;
+import flash.geom.Point;
 
 import mx.controls.Button;
-import mx.controls.Image;
 
 import spark.components.HGroup;
 
@@ -24,10 +24,10 @@ public class GameManager
         private var _activeSeed : ItemType;
 
         public function GameManager(farms : Farms, _currentGame : Game) {
-            trace("GameManager.new(_game = " + _currentGame.toString() + ")");
-
             _game = _currentGame;
             _farms = farms;
+
+            StageItem.setManager(this);
 
             _gameScene = new GameScene();
             _game.addChild(_gameScene);
@@ -60,7 +60,6 @@ public class GameManager
             _btnStep.width = Config.BUTTON_WIDTH;
             _itemPanel.addElement(_btnStep);
 
-            // Добавляем горизонтальную группу, для айтемов
             var _panelGroup : HGroup = new HGroup();
             _itemPanel.addElement(_panelGroup);
             _panelGroup.x = _itemPanel.width;
@@ -71,17 +70,42 @@ public class GameManager
             // Добавляем доступные саженцы
             for each (var _type : ItemType in ItemType._typesItem) {
                 var _panelItem : ItemOnPanel = new ItemOnPanel(_type);
-                _panelItem.setSize(100);
+                _panelItem.setSize(Config.ITEM_ON_PANEL_SIZE);
                 _panelGroup.addElement(_panelItem);
                 _panelItem.addEventListener(MouseEvent.CLICK, mouseClickOnPlant);
             }
         }
 
+        public function addItemOnScene(_stageItem : StageItem) : void {
+            _gameScene.getBackground().addElement(_stageItem);
+        }
+
         private function mouseClickOnPlant(_event : MouseEvent) : void {
             _activeSeed = _event.currentTarget.getType();
             _currentAction = Config.ACTION_PLANT;
-            trace("READY" + _activeSeed.getImgName());
-//            readyForAction(Config.SEED_IMAGE, _event.stageX, _event.stageY);
+            readyForAction(_event.stageX, _event.stageY);
+        }
+
+        private function readyForAction(_x : Number, _y : Number) : void {
+            if(_currentAction == Config.ACTION_PLANT)
+                _gameScene.getBackground().addEventListener(MouseEvent.CLICK, clickOnBg);
+        }
+
+        private function clickOnBg(_event : MouseEvent) : void {
+            if (_currentAction == Config.ACTION_PLANT)
+            {
+                // Сажаем
+                var _point : Point = getClickedPoint(_event.stageX, _event.stageY);
+                StageItem.createByPoint(_point);
+            }
+        }
+
+        private function getClickedPoint(_x: Number, _y: Number) : Point{
+            var point : Point = new Point();
+            point.x = _x + _gameScene.getDelta_X() - Config.BED_WIDTH / 2;
+            point.y = _y + _gameScene.getDelta_Y() - Config.BED_HEIGHT / 2;
+
+            return point;
         }
     }
 }
