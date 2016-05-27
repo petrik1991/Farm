@@ -9,8 +9,8 @@ package Game {
 
         public static const IMAGE_FILE_TYPE : String = ".png";
 
-        public static const GROUND_WIDTH : Number = 800;
-        public static const GROUND_HEIGHT : Number = 600;
+        public static const GROUND_WIDTH : Number = 1100;
+        public static const GROUND_HEIGHT : Number = 1100;
         public static const GROUND_CENTER_X : Number = GROUND_WIDTH / 2;
         public static const GROUND_CENTER_Y : Number = GROUND_HEIGHT / 2;
 

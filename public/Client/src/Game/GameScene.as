@@ -1,5 +1,7 @@
 package Game
 {
+import flash.events.MouseEvent;
+
 import mx.controls.Image;
 import mx.core.LayoutContainer;
 
@@ -11,6 +13,10 @@ import spark.components.SkinnableContainer;
         private var _bgImage : Image;
 
         private var _bgGarden : SkinnableContainer;
+
+        // Координаты курсора, для перемещения поля
+        private var _xCoord : Number;
+        private var _yCoord : Number;
 
         public function GameScene() {
             layout = "absolute";
@@ -36,6 +42,7 @@ import spark.components.SkinnableContainer;
             _bgImage.height = _bg.height;
             _bgImage.x = 0;
             _bgImage.y = 0;
+            _bgImage.smoothBitmapContent = true;
             _bg.addElement(_bgImage);
 
             _bgGarden = new SkinnableContainer();
@@ -46,11 +53,14 @@ import spark.components.SkinnableContainer;
             _bg.addElement(_bgGarden);
 
             paintGardenArea();
+
+            // Добавлем слушателя на нажатие кнопки
+            addEventListener(MouseEvent.MOUSE_DOWN, mousePressed);
         }
 
         private function paintGardenArea() : void {
             //прямоугольник, ограничивающий поле
-            _bgGarden.graphics.lineStyle(2, 0x000000, 0.7);
+            _bgGarden.graphics.lineStyle(1, 0x000000, 0.7);
             // К вершине верхней грядки
             _bgGarden.graphics.moveTo(
                     Config.GROUND_CENTER_X - Config.BED_SIZE * .2,
@@ -68,6 +78,46 @@ import spark.components.SkinnableContainer;
             _bgGarden.graphics.lineTo(
                     Config.GROUND_CENTER_X - Config.BED_SIZE * .2,
                     Config.GROUND_CENTER_Y - Config.BED_SIZE * 1.8);
+        }
+
+        private function mousePressed(_event : MouseEvent) : void {
+            trace("GameScene.mouse_down_under_background _event.stageX = " + _event.stageX.toString() +
+                    " _event.stageY = " + _event.stageY.toString());
+
+            _xCoord = _event.stageX;
+            _yCoord = _event.stageY;
+            // Добавлем слушателя на отжатие и перемещение
+            addEventListener(MouseEvent.MOUSE_UP, mousePressedOff);
+            addEventListener(MouseEvent.MOUSE_MOVE, mouseDrag);
+        }
+
+        private function mousePressedOff(_event : MouseEvent) : void {
+            trace("GameScene.mouse_up_under_background");
+
+            // Удаляем слушателя на отжатие и перемещение
+            removeEventListener(MouseEvent.MOUSE_UP, mousePressedOff);
+            removeEventListener(MouseEvent.MOUSE_MOVE, mouseDrag);
+        }
+
+        private function mouseDrag(_event : MouseEvent) : void {
+            trace("GameScene.mouse_move_under_background _event.stageX = " + _event.stageX.toString() +
+                    " _event.stageY = " + _event.stageY.toString());
+
+            // Вычисляем новые координаты
+            var _x : Number = _bg.x - (_xCoord - _event.stageX);
+            var _y : Number = _bg.y - (_yCoord - _event.stageY);
+            trace("_x = " + _x.toString() + "_y = " + _y.toString());
+            if (_x < Config.STAGE_WIDTH - _bg.width){_x = Config.STAGE_WIDTH - _bg.width}
+            if (_y < Config.STAGE_HEIGHT - _bg.height){_y = Config.STAGE_HEIGHT - _bg.height}
+            if (_x > 0){_x = 0}
+            if (_y > 0){_y = 0}
+            trace("after if _x = " + _x.toString() + "_y = " + _y.toString());
+
+            _xCoord = _event.stageX;
+            _yCoord = _event.stageY;
+
+            _bg.x = _x;
+            _bg.y = _y;
         }
     }
 }
