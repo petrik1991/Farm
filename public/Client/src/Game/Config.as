@@ -14,7 +14,6 @@ package Game {
 
         public static const BG_IMAGE : String = "grass.jpg";
 
-        // Типы действий
         public static const ACTION_NONE : String = "NONE";
         public static const ACTION_STEP : String = "STEP";
         public static const ACTION_PLANT : String = "PLANT";

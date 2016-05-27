@@ -17,6 +17,7 @@
             _game.y = 0;
             _game.width = Config.STAGE_WIDTH;
             _game.height = Config.STAGE_HEIGHT;
+            showGame();
         }
 
         public function showGame(): void {
