@@ -1,6 +1,11 @@
 package Game
 {
+import flash.events.MouseEvent;
+
 import mx.controls.Button;
+import mx.controls.Image;
+
+import spark.components.HGroup;
 
 import spark.components.SkinnableContainer;
 
@@ -16,6 +21,8 @@ public class GameManager
 
         private var _itemPanel : SkinnableContainer;
 
+        private var _activeSeed : ItemType;
+
         public function GameManager(farms : Farms, _currentGame : Game) {
             trace("GameManager.new(_game = " + _currentGame.toString() + ")");
 
@@ -25,10 +32,10 @@ public class GameManager
             _gameScene = new GameScene();
             _game.addChild(_gameScene);
 
-            initItems();
+            ItemType.Init(this);
         }
 
-        public function initItems() : void {
+        public function afterInitItems() : void {
 
             _itemPanel = new SkinnableContainer();
             _game.addChild(_itemPanel);
@@ -52,6 +59,29 @@ public class GameManager
             _btnStep.y = 40;
             _btnStep.width = Config.BUTTON_WIDTH;
             _itemPanel.addElement(_btnStep);
+
+            // Добавляем горизонтальную группу, для айтемов
+            var _panelGroup : HGroup = new HGroup();
+            _itemPanel.addElement(_panelGroup);
+            _panelGroup.x = _itemPanel.width;
+            _panelGroup.y = -15;
+            _panelGroup.width = _itemPanel.width;
+            _panelGroup.height = _itemPanel.height;
+
+            // Добавляем доступные саженцы
+            for each (var _type : ItemType in ItemType._typesItem) {
+                var _panelItem : ItemOnPanel = new ItemOnPanel(_type);
+                _panelItem.setSize(100);
+                _panelGroup.addElement(_panelItem);
+                _panelItem.addEventListener(MouseEvent.CLICK, mouseClickOnPlant);
+            }
+        }
+
+        private function mouseClickOnPlant(_event : MouseEvent) : void {
+            _activeSeed = _event.currentTarget.getType();
+            _currentAction = Config.ACTION_PLANT;
+            trace("READY" + _activeSeed.getImgName());
+//            readyForAction(Config.SEED_IMAGE, _event.stageX, _event.stageY);
         }
     }
 }
