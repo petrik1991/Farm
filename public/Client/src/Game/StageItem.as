@@ -113,7 +113,7 @@ public class StageItem extends Image
                 _deltaY = Config.BED_HEIGHT_AS_PLANT - Config.BED_HEIGHT;
             }
 
-            //y = _defY;// - _deltaY;
+            y = _defY - _deltaY;
             width = Config.BED_WIDTH;
             visible = true;
         }
@@ -143,8 +143,6 @@ public class StageItem extends Image
 
         public function incPhase() : void {
             trace("StageItem.inc_phase");
-            if (_type != null)
-            {
                 if (_phase < _type.getPhaseCount())
                 {
                     _phase += 1;
@@ -156,22 +154,21 @@ public class StageItem extends Image
 
                     setImage();
                 }
-            }
+        }
+
+        private function afterCollect() : void{
+            delete this;
         }
 
         public function collect() : void {
             trace("StageItem.collect");
 
-            if (_type != null && _phase == _type.getPhaseCount() && _manager != null)
+            if (_phase == _type.getPhaseCount() && _manager != null)
             {
                 // Скажем серверу что мы собали
                 var _variables : URLVariables = new URLVariables();
                 _variables.decode("id=" + _id);
-                ConnectToServer.sendToServer("game/collect_item", true, _variables, null);
-
-                _phase = 0;
-                _type = null;
-                setImage();
+                ConnectToServer.sendToServer("game/collect_item", true, _variables, afterCollect);
             }
         }
     }

@@ -20,7 +20,7 @@ import spark.components.SkinnableContainer;
 
         public function setSize(size : Number): void {
             width = height = size;
-            _image.height = _image.width = size;
+           //    _image.height = _image.width = size;
         }
 
         public function getType() : ItemType {

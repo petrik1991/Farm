@@ -1,6 +1,6 @@
 package Game {
     public class Config {
-        public static const SERVER_URL : String = "http://localhost:2500/";
+        public static const SERVER_URL : String = "http://localhost:3000/";
 
         public static const STAGE_WIDTH : Number = 800;
         public static const STAGE_HEIGHT : Number = 600;
@@ -21,9 +21,8 @@ package Game {
 
         public static const BG_IMAGE : String = "grass.jpg";
 
-        public static const BED_PHASE_ZERO : String = "bed_phase_0.png";
         public static const BED_WIDTH : Number = 140;
-        public static const BED_RATIO : Number = .6;
+        public static const BED_RATIO : Number = 6/10;
         public static const BED_RATIO_AS_PLANT : Number = 3/2;
         public static const BED_HEIGHT_AS_PLANT : Number = BED_WIDTH * BED_RATIO_AS_PLANT;
         public static const BED_HEIGHT : Number = BED_WIDTH * BED_RATIO;

@@ -82,7 +82,7 @@ public class GameManager
             ConnectToServer.sendToServer("game/get_game_state", false, null, gameStateReturned);
         }
 
-        private function onCollectClick() : void{
+        private function onCollectClick(event: MouseEvent) : void{
             _currentAction = Config.ACTION_COLLECT;
         }
 
@@ -143,11 +143,6 @@ public class GameManager
                 trace("collect");
                 // Собираем
                 StageItem(stageItem).collect();
-            }
-
-            if(_currentAction == Config.ACTION_STEP)
-            {
-                trace("step");
             }
         }
 

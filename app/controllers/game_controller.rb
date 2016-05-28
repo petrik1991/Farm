@@ -66,17 +66,7 @@ class GameController < ApplicationController
   end
 
   def collect_item
-    item = Stageitem.find(params[:id])
-
-    if item.nil? 
-      render :nothing => true
-    else
-      item.phase = 0
-      item.item_type = nil
-      item.save
-
-      render :nothing => true
-    end        
+    Stageitem.destroy(params[:id])       
   end
 
 end
