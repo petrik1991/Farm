@@ -1,5 +1,6 @@
 package Game
 {
+import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 
@@ -74,6 +75,29 @@ public class GameManager
                 _panelGroup.addElement(_panelItem);
                 _panelItem.addEventListener(MouseEvent.CLICK, mouseClickOnPlant);
             }
+
+            // Спросим с сервака состояние игры
+            ConnectToServer.sendToServer("game/get_game_state", false, null, gameStateReturned);
+        }
+
+        private function gameStateReturned(_event : Event) : void {
+            trace("GameManager.game_state_returned");
+            var _stageCollection : XMLList = new XMLList(_event.target.data);
+            trace(_stageCollection);
+            for each(var _item : XML in _stageCollection.children()) {
+                var _point : Point = new Point(_item.@x, _item.@y);
+
+                var _stageItem : StageItem = StageItem.load(_item.@id, _point, ItemType.getById(_item.@item_type), _item.@phase);
+                _gameScene.getBackground().addElement(_stageItem);
+            }
+
+            afterLoadGame();
+        }
+
+        private function afterLoadGame() : void {
+            trace("GameManager.after_load_game");
+            // Покажем игру
+            _farms.showGame();
         }
 
         public function addItemOnScene(_stageItem : StageItem) : void {

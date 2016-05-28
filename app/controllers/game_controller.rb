@@ -33,4 +33,19 @@ class GameController < ApplicationController
     render :xml => out_string;  
   end  
 
+  def get_game_state
+      state = Builder::XmlMarkup.new( :target => out_string = "", :indent => 2 )
+      state.Stage{
+        StageItem.all.each { |item|
+          state.Item(
+            "id" => item[:id], 
+            "item_type" => item[:item_type], 
+            "phase" => item[:phase],
+            "x" => item[:x], 
+            "y" => item[:y]);
+        }
+      }
+      render :xml => out_string;  
+  end
+
 end
