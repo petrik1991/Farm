@@ -17,8 +17,10 @@ class GameController < ApplicationController
   def add_item_on_stage
     x = params[:x]  
     y = params[:y]
+    type = params[:item_type]
     
     item = StageItem.create(
+      :item_type => type,
       :phase => 0,
       :x => x,
       :y => y)
@@ -33,6 +35,21 @@ class GameController < ApplicationController
     render :xml => out_string;  
   end  
 
+  def inc_item_phase
+    item = StageItem.find(params[:id])
+
+    if item.nil? 
+      render :nothing => true
+    else
+      type = ItemType.find(item.item_type)
+      if type.phase_count > item.phase
+        item.phase = item.phase + 1
+      end
+      item.save
+      render :nothing => true
+    end        
+  end
+
   def get_game_state
       state = Builder::XmlMarkup.new( :target => out_string = "", :indent => 2 )
       state.Stage{
@@ -46,6 +63,20 @@ class GameController < ApplicationController
         }
       }
       render :xml => out_string;  
+  end
+
+  def collect_item
+    item = Stageitem.find(params[:id])
+
+    if item.nil? 
+      render :nothing => true
+    else
+      item.phase = 0
+      item.item_type = nil
+      item.save
+
+      render :nothing => true
+    end        
   end
 
 end

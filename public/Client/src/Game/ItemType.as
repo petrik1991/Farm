@@ -40,6 +40,14 @@ import flash.utils.Dictionary;
             return _name;
         }
 
+        public function getPhaseCount() : Number {
+            return _phaseCount;
+        }
+
+        public function getID() : Number {
+            return _id;
+        }
+
         public static function getById(_id : Number) : ItemType {
             trace("ItemType.get_by_id " + _typesItem[_id])
             return _typesItem[_id];

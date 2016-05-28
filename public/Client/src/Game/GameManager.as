@@ -51,6 +51,7 @@ public class GameManager
             _btnCollect.label = "Собрать растение";
             _btnCollect.x = 0;
             _btnCollect.width = Config.BUTTON_WIDTH;
+            _btnCollect.addEventListener(MouseEvent.CLICK, onCollectClick);
             _itemPanel.addElement(_btnCollect);
 
             //сделать ход/вырастить растения на фазу
@@ -59,6 +60,7 @@ public class GameManager
             _btnStep.x = 0;
             _btnStep.y = 40;
             _btnStep.width = Config.BUTTON_WIDTH;
+            _btnStep.addEventListener(MouseEvent.CLICK, onStepClick)
             _itemPanel.addElement(_btnStep);
 
             var _panelGroup : HGroup = new HGroup();
@@ -76,43 +78,77 @@ public class GameManager
                 _panelItem.addEventListener(MouseEvent.CLICK, mouseClickOnPlant);
             }
 
-            // Спросим с сервака состояние игры
+            // Спросим состояние игры
             ConnectToServer.sendToServer("game/get_game_state", false, null, gameStateReturned);
         }
 
+        private function onCollectClick() : void{
+            _currentAction = Config.ACTION_COLLECT;
+        }
+
         private function gameStateReturned(_event : Event) : void {
-            trace("GameManager.game_state_returned");
             var _stageCollection : XMLList = new XMLList(_event.target.data);
-            trace(_stageCollection);
             for each(var _item : XML in _stageCollection.children()) {
                 var _point : Point = new Point(_item.@x, _item.@y);
 
                 var _stageItem : StageItem = StageItem.load(_item.@id, _point, ItemType.getById(_item.@item_type), _item.@phase);
                 _gameScene.getBackground().addElement(_stageItem);
+                _stageItem.addEventListener(MouseEvent.CLICK, clickOnStageItem);
             }
 
             afterLoadGame();
         }
 
         private function afterLoadGame() : void {
-            trace("GameManager.after_load_game");
             // Покажем игру
             _farms.showGame();
         }
 
         public function addItemOnScene(_stageItem : StageItem) : void {
             _gameScene.getBackground().addElement(_stageItem);
+            _stageItem.addEventListener(MouseEvent.CLICK, clickOnStageItem);
         }
 
         private function mouseClickOnPlant(_event : MouseEvent) : void {
             _activeSeed = _event.currentTarget.getType();
             _currentAction = Config.ACTION_PLANT;
-            readyForAction(_event.stageX, _event.stageY);
+            readyForAction();
         }
 
-        private function readyForAction(_x : Number, _y : Number) : void {
-            if(_currentAction == Config.ACTION_PLANT)
-                _gameScene.getBackground().addEventListener(MouseEvent.CLICK, clickOnBg);
+        private function readyForAction() : void {
+            _gameScene.getBackground().addEventListener(MouseEvent.CLICK, clickOnBg);
+        }
+
+        private function onStepClick(_event : MouseEvent) : void {
+            if(StageItem._collection.length == 0)
+                return;
+
+            _currentAction = Config.ACTION_STEP;
+
+            for each(var stageItem: StageItem in StageItem._collection)
+                stageItem.incPhase();
+        }
+
+        private function clickOnStageItem(_event : MouseEvent) : void {
+            trace("GameManager.click_on_stage_item");
+
+            var point : Point = StageItem.codePoint(getClickedPoint(_event.stageX, _event.stageY));
+            var stageItem : StageItem = StageItem.getStageItemByCoord(point);
+
+            if(stageItem == null)
+                return;
+
+            if (_currentAction == Config.ACTION_COLLECT)
+            {
+                trace("collect");
+                // Собираем
+                StageItem(stageItem).collect();
+            }
+
+            if(_currentAction == Config.ACTION_STEP)
+            {
+                trace("step");
+            }
         }
 
         private function clickOnBg(_event : MouseEvent) : void {
@@ -120,7 +156,7 @@ public class GameManager
             {
                 // Сажаем
                 var _point : Point = getClickedPoint(_event.stageX, _event.stageY);
-                StageItem.createByPoint(_point);
+                StageItem.createByPoint(_point, _activeSeed.getID());
             }
         }
 

@@ -36,5 +36,6 @@ package Game {
         public static const ACTION_NONE : String = "NONE";
         public static const ACTION_STEP : String = "STEP";
         public static const ACTION_PLANT : String = "PLANT";
+        public static const ACTION_COLLECT : String = "COLLECT";
     }
 }

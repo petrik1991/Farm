@@ -1,5 +1,7 @@
 package Game
 {
+import avmplus.variableXml;
+
 import flash.events.Event;
 import flash.geom.Point;
 import flash.net.URLVariables;
@@ -27,10 +29,11 @@ public class StageItem extends Image
             x = _decodePoint.x;
             y = _defY;
 
-            setImage();
+            smoothBitmapContent = true;
+            //setImage();
         }
 
-        public static function createByPoint(_point : Point) : void {
+        public static function createByPoint(_point : Point, type : int) : void {
             var _codePoint : Point = codePoint(_point);
 
             // Проверим умещается ли на плантацию
@@ -53,6 +56,7 @@ public class StageItem extends Image
             var _variables : URLVariables = new URLVariables();
             _variables.decode("x=" + _codePoint.x);
             _variables.decode("y=" + _codePoint.y);
+            _variables.decode("item_type=" + type);
             ConnectToServer.sendToServer("game/add_item_on_stage", true, _variables, createByData);
         }
 
@@ -84,6 +88,15 @@ public class StageItem extends Image
             return _newPoint;
         }
 
+        public static function getStageItemByCoord(point: Point) : StageItem{
+            for each (var _stageItem : StageItem in _collection)
+            {
+                if (point.x == _stageItem._x && point.y == _stageItem._y)
+                    return _stageItem;
+            }
+            return null;
+        }
+
         public static function setManager(_gameManager : GameManager) : void {
             _manager = _gameManager;
         }
@@ -93,14 +106,14 @@ public class StageItem extends Image
             visible = false;
             if (_type == null)
             {
-                AssetsManager.getInstance().loadPictureAndCache(Config.BED_PHASE_ZERO, this);
+                //AssetsManager.getInstance().loadPictureAndCache(Config.BED_PHASE_ZERO, this);
             } else
             {
                 AssetsManager.getInstance().loadPictureAndCache(_type.getImgName() + "_" + _phase.toString() + Config.IMAGE_FILE_TYPE, this);
                 _deltaY = Config.BED_HEIGHT_AS_PLANT - Config.BED_HEIGHT;
             }
 
-            y = _defY - _deltaY;
+            //y = _defY;// - _deltaY;
             width = Config.BED_WIDTH;
             visible = true;
         }
@@ -108,7 +121,7 @@ public class StageItem extends Image
         private static function createByData(_event : Event) : void {
             var _item : XMLList = new XMLList(_event.target.data);
             var _point : Point = new Point(_item.@x, _item.@y);
-            var _stageItem : StageItem = StageItem.load(_item.@id, _point, ItemType.getById(_item.@item_type), _item.@phase);
+            var _stageItem : StageItem = load(_item.@id, _point, ItemType.getById(_item.@item_type), _item.@phase);
             _manager.addItemOnScene(_stageItem);
         }
 
@@ -126,6 +139,40 @@ public class StageItem extends Image
             _newPoint.y = Math.round(_newPoint.y);
 
             return _newPoint;
+        }
+
+        public function incPhase() : void {
+            trace("StageItem.inc_phase");
+            if (_type != null)
+            {
+                if (_phase < _type.getPhaseCount())
+                {
+                    _phase += 1;
+
+                    // Скажем серверу про увеличение стадии
+                    var _variables : URLVariables = new URLVariables();
+                    _variables.decode("id=" + _id);
+                    ConnectToServer.sendToServer("game/inc_item_phase", true, _variables, null);
+
+                    setImage();
+                }
+            }
+        }
+
+        public function collect() : void {
+            trace("StageItem.collect");
+
+            if (_type != null && _phase == _type.getPhaseCount() && _manager != null)
+            {
+                // Скажем серверу что мы собали
+                var _variables : URLVariables = new URLVariables();
+                _variables.decode("id=" + _id);
+                ConnectToServer.sendToServer("game/collect_item", true, _variables, null);
+
+                _phase = 0;
+                _type = null;
+                setImage();
+            }
         }
     }
 }
