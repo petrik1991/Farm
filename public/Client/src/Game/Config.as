@@ -10,19 +10,18 @@ package Game {
         public static const IMAGE_FILE_TYPE : String = ".png";
 
         public static const GROUND_WIDTH : Number = 1000;
-        public static const GROUND_HEIGHT : Number = 1100;
+        public static const GROUND_HEIGHT : Number = 1000;
         public static const GROUND_CENTER_X : Number = GROUND_WIDTH / 2;
         public static const GROUND_CENTER_Y : Number = GROUND_HEIGHT / 2;
 
-        public static const BUTTON_PANEL_SIZE : Number = 80;
         public static const BUTTON_WIDTH : Number = 120;
 
         public static const ITEM_ON_PANEL_SIZE : Number = 100;
 
         public static const BG_IMAGE : String = "grass.jpg";
 
-        public static const BED_WIDTH : Number = 140;
-        public static const BED_RATIO : Number = 6/10;
+        public static const BED_WIDTH : Number = 100;
+        public static const BED_RATIO : Number = 5/10;
         public static const BED_RATIO_AS_PLANT : Number = 3/2;
         public static const BED_HEIGHT_AS_PLANT : Number = BED_WIDTH * BED_RATIO_AS_PLANT;
         public static const BED_HEIGHT : Number = BED_WIDTH * BED_RATIO;

@@ -1,5 +1,8 @@
 package Game
 {
+import Game.StageItem;
+import Game.StageItem;
+
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
@@ -41,15 +44,11 @@ public class GameManager
             _itemPanel = new SkinnableContainer();
             _game.addChild(_itemPanel);
 
-            _itemPanel.width = Config.BUTTON_PANEL_SIZE * 2;
-            _itemPanel.height = Config.BUTTON_PANEL_SIZE * 2;
-            _itemPanel.x = 0;
-            _itemPanel.y = Config.STAGE_HEIGHT - Config.BUTTON_PANEL_SIZE;
-
             //кнопка сбора урожая
             var _btnCollect : Button = new Button();
             _btnCollect.label = "Собрать растение";
             _btnCollect.x = 0;
+            _btnCollect.y = Config.STAGE_HEIGHT - 50;
             _btnCollect.width = Config.BUTTON_WIDTH;
             _btnCollect.addEventListener(MouseEvent.CLICK, onCollectClick);
             _itemPanel.addElement(_btnCollect);
@@ -58,17 +57,15 @@ public class GameManager
             var _btnStep : Button = new Button();
             _btnStep.label = "Сделать ход";
             _btnStep.x = 0;
-            _btnStep.y = 40;
+            _btnStep.y = Config.STAGE_HEIGHT - 100;
             _btnStep.width = Config.BUTTON_WIDTH;
             _btnStep.addEventListener(MouseEvent.CLICK, onStepClick);
             _itemPanel.addElement(_btnStep);
 
             var _panelGroup : HGroup = new HGroup();
             _itemPanel.addElement(_panelGroup);
-            _panelGroup.x = _itemPanel.width;
-            _panelGroup.y = -15;
-            _panelGroup.width = _itemPanel.width;
-            _panelGroup.height = _itemPanel.height;
+            _panelGroup.x = Config.BUTTON_WIDTH * 2;
+            _panelGroup.y = Config.STAGE_HEIGHT - Config.ITEM_ON_PANEL_SIZE;
 
             // Добавляем доступные саженцы
             for each (var _type : ItemType in ItemType._typesItem) {
@@ -130,12 +127,11 @@ public class GameManager
         }
 
         public function deleteFromFarm(stageItem : StageItem) : void{
-            trace(StageItem._collection.length);
-                if(StageItem._collection.indexOf(stageItem) >= 0)
-                {
-                    StageItem._collection.splice(StageItem._collection.indexOf(stageItem), 1);
-                    stageItem.source = null;
-                }
+            if(StageItem._collection.indexOf(stageItem) >= 0)
+            {
+                StageItem._collection.splice(StageItem._collection.indexOf(stageItem), 1);
+                stageItem.source = null;
+            }
         }
 
         private function clickOnStageItem(_event : MouseEvent) : void {
@@ -154,6 +150,7 @@ public class GameManager
         private function clickOnBg(_event : MouseEvent) : void {
             if (_currentAction == Config.ACTION_PLANT)
             {
+                trace(_event.stageX.toString() + "      " + _event.stageY);
                 // Сажаем
                 var _point : Point = getClickedPoint(_event.stageX, _event.stageY);
                 StageItem.createByPoint(_point, _activeSeed.getID());
@@ -163,7 +160,7 @@ public class GameManager
         private function getClickedPoint(_x: Number, _y: Number) : Point{
             var point : Point = new Point();
             point.x = _x + _gameScene.getDelta_X() - Config.BED_WIDTH / 2;
-            point.y = _y + _gameScene.getDelta_Y() - Config.BED_HEIGHT / 2;
+            point.y = _y + _gameScene.getDelta_Y() + Config.BED_HEIGHT / 2;
 
             return point;
         }

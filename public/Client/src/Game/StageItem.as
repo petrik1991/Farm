@@ -36,18 +36,14 @@ public class StageItem extends Image
 
             // Проверим умещается ли на плантацию
             if (Math.abs(_codePoint.x) > Config.BED_NUMBER_OF_ROWS || Math.abs(_codePoint.y) > Config.BED_NUMBER_OF_ROWS)
-            {
                 return;
-            }
 
             // Проверим наличие данной клетки
             for each (var _stageItem : StageItem in _collection)
             {
                 trace(_codePoint.x.toString() + " " + _codePoint.y.toString() + " " + _stageItem._x.toString() + " "  + _stageItem._y.toString() + " ");
                 if (_codePoint.x == _stageItem._x && _codePoint.y == _stageItem._y)
-                {
                     return;
-                }
             }
 
             // Скажем серверу про новый айтэм

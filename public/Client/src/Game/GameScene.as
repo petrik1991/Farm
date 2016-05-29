@@ -59,24 +59,24 @@ import spark.components.SkinnableContainer;
 
         private function paintGardenArea() : void {
             //прямоугольник, ограничивающий поле
-            _bgGarden.graphics.lineStyle(1, 0x000000, 0.7);
+            _bgGarden.graphics.lineStyle(4, 0x0, 1);
             // К вершине верхней грядки
             _bgGarden.graphics.moveTo(
                     Config.GROUND_CENTER_X + Config.BED_WIDTH / 2,
-                    Config.GROUND_CENTER_Y - Config.BED_HEIGHT * Config.BED_NUMBER_OF_ROWS);
-            // Рисуем 4 линии
+                    Config.GROUND_CENTER_Y - Config.BED_HEIGHT * (Config.BED_NUMBER_OF_ROWS + 1));
+             //Рисуем 4 линии
             _bgGarden.graphics.lineTo(
                     Config.GROUND_CENTER_X + Config.BED_WIDTH * (Config.BED_NUMBER_OF_ROWS + 1),
-                    Config.GROUND_CENTER_Y + Config.BED_HEIGHT / 2);
+                    Config.GROUND_CENTER_Y - Config.BED_HEIGHT / 2);
             _bgGarden.graphics.lineTo(
                     Config.GROUND_CENTER_X + Config.BED_WIDTH / 2,
-                    Config.GROUND_CENTER_Y + Config.BED_HEIGHT * (Config.BED_NUMBER_OF_ROWS + 1));
+                    Config.GROUND_CENTER_Y + Config.BED_HEIGHT * (Config.BED_NUMBER_OF_ROWS));
             _bgGarden.graphics.lineTo(
                     Config.GROUND_CENTER_X - Config.BED_WIDTH * Config.BED_NUMBER_OF_ROWS,
-                    Config.GROUND_CENTER_Y + Config.BED_HEIGHT / 2);
+                    Config.GROUND_CENTER_Y - Config.BED_HEIGHT / 2);
             _bgGarden.graphics.lineTo(
                     Config.GROUND_CENTER_X + Config.BED_WIDTH / 2,
-                    Config.GROUND_CENTER_Y - Config.BED_HEIGHT * Config.BED_NUMBER_OF_ROWS);
+                    Config.GROUND_CENTER_Y - Config.BED_HEIGHT * (Config.BED_NUMBER_OF_ROWS + 1));
         }
 
         private function mousePressed(_event : MouseEvent) : void {
@@ -119,7 +119,7 @@ import spark.components.SkinnableContainer;
         }
 
         public function getDelta_Y() : Number {
-            return -1 * (_bg.y);
+            return -1 * _bg.y;
         }
     }
 }
