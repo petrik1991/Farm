@@ -100,20 +100,11 @@ public class StageItem extends Image
         }
 
         private function setImage() : void {
-            var _deltaY : Number = 0;
-            visible = false;
-            if (_type == null)
-            {
-                //AssetsManager.getInstance().loadPictureAndCache(Config.BED_PHASE_ZERO, this);
-            } else
-            {
-                AssetsManager.getInstance().loadPictureAndCache(_type.getImgName() + "_" + _phase.toString() + Config.IMAGE_FILE_TYPE, this);
-                _deltaY = Config.BED_HEIGHT_AS_PLANT - Config.BED_HEIGHT;
-            }
+            AssetsManager.getInstance().loadPictureAndCache(_type.getImgName() + "_" + _phase.toString() + Config.IMAGE_FILE_TYPE, this);
+            var _deltaY : Number = Config.BED_HEIGHT_AS_PLANT - Config.BED_HEIGHT;
 
             y = _defY - _deltaY;
             width = Config.BED_WIDTH;
-            visible = true;
         }
 
         private static function createByData(_event : Event) : void {
@@ -140,10 +131,8 @@ public class StageItem extends Image
         }
 
         public function incPhase() : void {
-            trace("StageItem.inc_phase");
                 if (_phase < _type.getPhaseCount())
                 {
-                    trace(_phase.toString());
                     _phase += 1;
 
                     // Скажем серверу про увеличение стадии
@@ -155,8 +144,8 @@ public class StageItem extends Image
                 }
         }
 
-        private function afterCollect() : void{
-            delete this;
+        private function afterCollect(event : Event) : void{
+            _manager.deleteFromFarm(this);
         }
 
         public function collect() : void {
@@ -168,6 +157,7 @@ public class StageItem extends Image
                 var _variables : URLVariables = new URLVariables();
                 _variables.decode("id=" + _id);
                 ConnectToServer.sendToServer("game/collect_item", true, _variables, afterCollect);
+                //this.source = null;
             }
         }
     }

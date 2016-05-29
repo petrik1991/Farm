@@ -129,18 +129,23 @@ public class GameManager
                 stageItem.incPhase();
         }
 
-        private function clickOnStageItem(_event : MouseEvent) : void {
-            trace("GameManager.click_on_stage_item");
+        public function deleteFromFarm(stageItem : StageItem) : void{
+            trace(StageItem._collection.length);
+                if(StageItem._collection.indexOf(stageItem) >= 0)
+                {
+                    StageItem._collection.splice(StageItem._collection.indexOf(stageItem), 1);
+                    stageItem.source = null;
+                }
+        }
 
-            var point : Point = StageItem.codePoint(getClickedPoint(_event.stageX, _event.stageY));
-            var stageItem : StageItem = StageItem.getStageItemByCoord(point);
+        private function clickOnStageItem(_event : MouseEvent) : void {
+            var stageItem : StageItem = _event.currentTarget as StageItem;
 
             if(stageItem == null)
                 return;
 
             if (_currentAction == Config.ACTION_COLLECT)
             {
-                trace("collect");
                 // Собираем
                 StageItem(stageItem).collect();
             }

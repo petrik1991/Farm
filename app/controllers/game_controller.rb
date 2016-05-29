@@ -66,7 +66,8 @@ class GameController < ApplicationController
   end
 
   def collect_item
-    Stageitem.destroy(params[:id])       
+    StageItem.destroy(params[:id])  
+    render :nothing => true     
   end
 
 end

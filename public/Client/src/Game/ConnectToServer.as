@@ -28,7 +28,6 @@ import mx.controls.Alert;
             loader.addEventListener(IOErrorEvent.IO_ERROR, connectError);
 
             loader.load(_req);
-
         }
 
         public static function connectError(_event : Event): void {
