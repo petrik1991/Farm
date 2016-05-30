@@ -86,8 +86,7 @@ public class StageItem extends Image
         private function setImage() : void {
             AssetsManager.getInstance().loadPictureAndCache(_type.getImgName() + "_" + _phase.toString() + Config.IMAGE_FILE_TYPE, this);
             var _deltaY : Number = Config.BED_HEIGHT_AS_PLANT - Config.BED_HEIGHT;
-
-            y = _phase == 0 ? _defY - _deltaY : _defY - _deltaY / 2;
+            y = _defY - _deltaY;
         }
 
         private static function createByData(_event : Event) : void {

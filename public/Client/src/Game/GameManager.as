@@ -4,9 +4,10 @@ import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
 
-import mx.controls.Button;
+import spark.components.Button;
 
 import spark.components.HGroup;
+import spark.components.Label;
 
 import spark.components.SkinnableContainer;
 
@@ -23,6 +24,8 @@ public class GameManager
         private var _itemPanel : SkinnableContainer;
 
         private var _activeSeed : ItemType;
+
+        private var _state : Label;
 
         public function GameManager(farms : Farms, _currentGame : Game) {
             _game = _currentGame;
@@ -44,8 +47,7 @@ public class GameManager
             //кнопка сбора урожая
             var _btnCollect : Button = new Button();
             _btnCollect.label = "Собрать растение";
-            _btnCollect.x = 0;
-            _btnCollect.y = Config.STAGE_HEIGHT - 50;
+            _btnCollect.y = Config.STAGE_HEIGHT - 30;
             _btnCollect.width = Config.BUTTON_WIDTH;
             _btnCollect.addEventListener(MouseEvent.CLICK, onCollectClick);
             _itemPanel.addElement(_btnCollect);
@@ -53,11 +55,16 @@ public class GameManager
             //сделать ход/вырастить растения на фазу
             var _btnStep : Button = new Button();
             _btnStep.label = "Сделать ход";
-            _btnStep.x = 0;
-            _btnStep.y = Config.STAGE_HEIGHT - 100;
+            _btnStep.y = Config.STAGE_HEIGHT - 60;
             _btnStep.width = Config.BUTTON_WIDTH;
             _btnStep.addEventListener(MouseEvent.CLICK, onStepClick);
             _itemPanel.addElement(_btnStep);
+
+            _state = new Label();
+            _state.y = Config.STAGE_HEIGHT - 90;
+            _state.width = Config.BUTTON_WIDTH;
+            _state.height = 40;
+            _itemPanel.addElement(_state);
 
             var _panelGroup : HGroup = new HGroup();
             _itemPanel.addElement(_panelGroup);
@@ -78,6 +85,7 @@ public class GameManager
 
         private function onCollectClick(event: MouseEvent) : void{
             _currentAction = Config.ACTION_COLLECT;
+            _state.text = "Собираем";
         }
 
         private function gameStateReturned(_event : Event) : void {
@@ -106,6 +114,7 @@ public class GameManager
         private function mouseClickOnPlant(_event : MouseEvent) : void {
             _activeSeed = _event.currentTarget.getType();
             _currentAction = Config.ACTION_PLANT;
+            _state.text = "Сажаем " + _activeSeed.getImgName();
             readyForAction();
         }
 
@@ -118,6 +127,7 @@ public class GameManager
                 return;
 
             _currentAction = Config.ACTION_STEP;
+            _state.text = "Выращиваем";
 
             for each(var stageItem: StageItem in StageItem._collection)
                 stageItem.incPhase();
