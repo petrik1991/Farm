@@ -59,7 +59,7 @@ import spark.components.SkinnableContainer;
 
         private function paintGardenArea() : void {
             //прямоугольник, ограничивающий поле
-            _bgGarden.graphics.lineStyle(4, 0x0, 1);
+            _bgGarden.graphics.lineStyle(1, 0x0, .6);
             // К вершине верхней грядки
             _bgGarden.graphics.moveTo(
                     Config.GROUND_CENTER_X + Config.BED_WIDTH / 2,

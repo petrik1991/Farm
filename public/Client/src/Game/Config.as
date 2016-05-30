@@ -20,7 +20,7 @@ package Game {
 
         public static const BG_IMAGE : String = "grass.jpg";
 
-        public static const BED_WIDTH : Number = 100;
+        public static const BED_WIDTH : Number = 105;
         public static const BED_RATIO : Number = 5/10;
         public static const BED_RATIO_AS_PLANT : Number = 3/2;
         public static const BED_HEIGHT_AS_PLANT : Number = BED_WIDTH * BED_RATIO_AS_PLANT;

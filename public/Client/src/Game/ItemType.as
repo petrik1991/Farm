@@ -49,7 +49,6 @@ import flash.utils.Dictionary;
         }
 
         public static function getById(_id : int) : ItemType {
-            trace("ItemType.get_by_id " + _typesItem[_id])
             return _typesItem[_id];
         }
     }

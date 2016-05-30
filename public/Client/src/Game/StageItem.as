@@ -28,7 +28,6 @@ public class StageItem extends Image
             y = _defY;
 
             smoothBitmapContent = true;
-            //setImage();
         }
 
         public static function createByPoint(_point : Point, type : int) : void {
@@ -55,8 +54,6 @@ public class StageItem extends Image
         }
 
         public static function load(_idNumber : int, _point : Point, _itemType : ItemType, _onPhase : int) : StageItem {
-            trace("StageItem.load");
-
             var _codePoint : Point = _point;
             var _decodePoint : Point = StageItem.decodePoint(_point);
 
@@ -82,15 +79,6 @@ public class StageItem extends Image
             return _newPoint;
         }
 
-        public static function getStageItemByCoord(point: Point) : StageItem{
-            for each (var _stageItem : StageItem in _collection)
-            {
-                if (point.x == _stageItem._x && point.y == _stageItem._y)
-                    return _stageItem;
-            }
-            return null;
-        }
-
         public static function setManager(_gameManager : GameManager) : void {
             _manager = _gameManager;
         }
@@ -99,8 +87,7 @@ public class StageItem extends Image
             AssetsManager.getInstance().loadPictureAndCache(_type.getImgName() + "_" + _phase.toString() + Config.IMAGE_FILE_TYPE, this);
             var _deltaY : Number = Config.BED_HEIGHT_AS_PLANT - Config.BED_HEIGHT;
 
-            y = _defY - _deltaY;
-            width = Config.BED_WIDTH;
+            y = _phase == 0 ? _defY - _deltaY : _defY - _deltaY / 2;
         }
 
         private static function createByData(_event : Event) : void {
@@ -145,15 +132,12 @@ public class StageItem extends Image
         }
 
         public function collect() : void {
-            trace("StageItem.collect");
-
             if (_phase == _type.getPhaseCount() && _manager != null)
             {
                 // Скажем серверу что мы собали
                 var _variables : URLVariables = new URLVariables();
                 _variables.decode("id=" + _id);
                 ConnectToServer.sendToServer("game/collect_item", true, _variables, afterCollect);
-                //this.source = null;
             }
         }
     }

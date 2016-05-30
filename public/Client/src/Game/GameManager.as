@@ -1,8 +1,5 @@
 package Game
 {
-import Game.StageItem;
-import Game.StageItem;
-
 import flash.events.Event;
 import flash.events.MouseEvent;
 import flash.geom.Point;
@@ -150,7 +147,6 @@ public class GameManager
         private function clickOnBg(_event : MouseEvent) : void {
             if (_currentAction == Config.ACTION_PLANT)
             {
-                trace(_event.stageX.toString() + "      " + _event.stageY);
                 // Сажаем
                 var _point : Point = getClickedPoint(_event.stageX, _event.stageY);
                 StageItem.createByPoint(_point, _activeSeed.getID());
